@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>结直肠癌筛查短信提醒系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .main-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .project-info {
+            background: #e8f4fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .project-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .project-desc {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+        
+        .sms-templates {
+            display: grid;
+            gap: 25px;
+        }
+        
+        .template-category {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #dee2e6;
+        }
+        
+        .category-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .template-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .template-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+        
+        .template-type {
+            background: #3498db;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        
+        .sms-content {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed #dee2e6;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .variable {
+            background: #fff3cd;
+            color: #856404;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .template-notes {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+        
+        .reminder-schedule {
+            background: #fff3cd;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border-left: 5px solid #f39c12;
+        }
+        
+        .schedule-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .schedule-timeline {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-time {
+            background: #f39c12;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            min-width: 120px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .timeline-action {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .settings-section {
+            background: #d5f4e6;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border-left: 5px solid #27ae60;
+        }
+        
+        .settings-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .toggle-switch {
+            width: 50px;
+            height: 24px;
+            background: #27ae60;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            right: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-switch.off {
+            background: #95a5a6;
+        }
+        
+        .toggle-switch.off::after {
+            right: 28px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>结直肠癌筛查短信提醒系统</h1>
+            <p>基于中国城市癌症早诊早治项目的智能提醒服务</p>
+        </div>
+        
+        <div class="content">
+            <div class="project-info">
+                <div class="project-title">🏥 中国城市癌症早诊早治项目</div>
+                <div class="project-desc">
+                    国家卫生健康委组织实施的重大公共卫生项目，为城市常住人口提供免费癌症筛查服务。
+                    本短信提醒系统配合项目实施，提供全流程智能化提醒服务。
+                </div>
+            </div>
+            
+            <h2 class="main-title">📱 短信提醒模板</h2>
+            
+            <div class="sms-templates">
+                <!-- 筛查邀请类 -->
+                <div class="template-category">
+                    <div class="category-title">
+                        📧 筛查邀请提醒
+                    </div>
+                    
+                    <div class="template-item">
+                        <div class="template-header">
+                            <div class="template-name">筛查资格通知</div>
+                            <div class="template-type">邀请类</div>
+                        </div>
+                        <div class="sms-content">
+                            【城市癌症早诊早治】您好，<span class="variable">{姓名}</span>！您符合免费结直肠癌筛查条件，请于<span class="variable">{日期}</span>前到<span class="variable">{社区卫生服务中心}</span>参加筛查。咨询电话：<span class="variable">{电话}</span>。国家项目，完全免费！
+                        </div>
+                        <div class="template-notes">发送时机：筛查名单确定后3日内</div>
+                    </div>
+                    
+                    <div class="template-item">
+                        <div class="template-header">
+                            <div class="template-name">筛查动员</div>
+                            <div class="template-type">宣传类</div>
+                        </div>
+                        <div class="sms-content">
+                            【城市癌症早诊早治】<span class="variable">{社区名称}</span>居民您好！结直肠癌免费筛查正在进行，早发现早治疗，守护您的健康。详情请咨询社区工作人员或拨打<span class="variable">{咨询电话}</span>。
+                        </div>
+                        <div class="template-notes">发送时机：筛查活动启动时群发</div>
+                    </div>
+                </div>
+                
+                <!-- 预约提醒类 -->
+                <div class="template-category">
+                    <div class="category-title">
+                        ⏰ 预约提醒
+                    </div>
+                    
+                    <div class="template-item">
+                        <div class="template-header">
+                            <div class="template-name">首次筛查预约</div>
+                            <div class="template-type">预约类</div>
+                        </div>
+                        <div class="sms-content">
+                            【城市癌症早诊早治】<span class="variable">{姓名}</span>您好！您的结直肠癌筛查预约：<span class="variable">{日期}</span> <span class="variable">{时间}</span>，地点：<span class="variable">{医院名称}</span>。请携带身份证，空腹前来。地址：<span class="variable">{详细地址}</span>
+                        </div>
+                        <div class="template-notes">发送时机：预约成功后立即发送</div>
+                    </div>
+                    
+                    <div class="template-item">
+                        <div class="template-header">
+                            <div class="template-name">筛查前提醒</div>
+                            <div class="template-type">提醒类</div>
+                        </div>
+                        <div class="sms-content">
+                            【城市癌症早诊早治】温馨提醒：您明天<span class="variable">{时间}</span>在<span class="variable">{医院}</span>有结直肠癌筛查预约。请携带身份证，按时到达。如需改约请提前联系：<span class="variable">{联系电话}</span>
+                        </div>
+                        <div class="template-notes">发送时机：筛查前1天晚上20:00</div>
+                    </div>
+                    
+                    <div class="template-item">
+                        <div class="template-header">
+                            <div class="template-name">进一步检查预约</div>
+                            <div class="template-type">转诊类</div>
+                        </div>
+                        <div class="sms-content">
+                            【城市癌症早诊早治】<span class="variable">{姓名}</span>您好！根据初筛结果，建议您进行结肠镜检查。预约时间：<span class="variable">{日期}</span> <span class="variable">{时间}</span>，地点：<span class="variable">{医院}</span>。请按医嘱准备，免费检查。
+                        </div>
+                        <div class="template-notes">发送时机：初筛阳性结果确认后24小时内</div>
+                    </div>
+                </div>
+                
+                <!-- 随访提醒类 -->
+                <div class="template-category">
+                    <div class="category-title">
+                        🔄 随访提醒
+                    </div>
+                    
+                    <div class="template-item">
+                        <div class="template-header">
+                            <div class="template-name">年度复查提醒</div>
+                            <div class="template-type">随访类</div>
+                        </div>
+                        <div class="sms-content">
+                            【城市癌症早诊早治】<span class="variable">{姓名}</span>您好！距离您上次结直肠癌筛查已满一年，建议进行复查。请关注社区通知或主动联系<span class="variable">{社区卫生服务中心}</span>预约，电话：<span class="variable">{电话}</span>
+                        </div>
+                        <div class="template-notes">发送时机：上次筛查满12个月时</div>
+                    </div>
+                    
+                    <div class="template-item">
+                        <div class="template-header">
+                            <div class="template-name">健康管理提醒</div>
+                            <div class="template-type">健康类</div>
+                        </div>
+                        <div class="sms-content">
+                            【城市癌症早诊早治】健康提醒：定期筛查、合理膳食、适量运动是预防结直肠癌的重要措施。如有腹痛、便血等症状，请及时就医。健康热线：<span class="variable">{热线电话}</span>
+                        </div>
+                        <div class="template-notes">发送时机：每季度发送一次健康提醒</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 提醒时间安排 -->
+            <div class="reminder-schedule">
+                <div class="schedule-title">⏱️ 提醒时间安排</div>
+                <div class="schedule-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-time">项目启动</div>
+                        <div class="timeline-action">发送筛查动员短信（群发）</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">名单确定后3日</div>
+                        <div class="timeline-action">发送筛查资格通知（个人）</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">预约成功后</div>
+                        <div class="timeline-action">发送预约确认短信</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">筛查前1天</div>
+                        <div class="timeline-action">发送筛查提醒短信（20:00）</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">异常结果24小时内</div>
+                        <div class="timeline-action">发送进一步检查通知</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">每年筛查周期</div>
+                        <div class="timeline-action">发送年度复查提醒</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 提醒设置 -->
+            <div class="settings-section">
+                <div class="settings-title">⚙️ 提醒设置</div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">筛查邀请提醒</div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">预约确认提醒</div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">检查前提醒</div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">随访提醒</div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">健康教育提醒</div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleSwitch(element) {
+            element.classList.toggle('off');
+        }
+    </script>
+</body>
+</html>
